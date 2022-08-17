@@ -1,0 +1,9 @@
+.form__submit-button_type_inverted {
+  background-color: #fff;
+  color: #000;
+  margin-top: 168px;
+}
+
+.form__submit-button_type_inverted:hover {
+  opacity: .85;
+}

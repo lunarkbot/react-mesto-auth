@@ -1,0 +1,14 @@
+.form__link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 17px;
+  display: inline-flex;
+  justify-self: center;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.form__link:hover {
+  opacity: .85;
+}
