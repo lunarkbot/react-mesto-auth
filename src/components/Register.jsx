@@ -1,11 +1,56 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {NavLink} from 'react-router-dom';
+import auth from '../utils/auth';
 
 function Register(props) {
+  const [userData, setUserData] = useState({
+    email: '',
+    password: ''
+  });
+
+  function handleChange(e) {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    setUserData({
+      ...userData,
+      [name]: value
+    })
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    auth.signUp(userData)
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          let message = '';
+
+          switch (res.status) {
+            case 400:
+              message = 'Некорректно заполнено одно из полей.';
+              break;
+            default:
+              message = 'Повторите попытку позже.';
+          }
+
+          return Promise.reject(`Ошибка: ${res.status}. ${message}`);
+        }
+      })
+      .then(data => {
+        console.log(data);
+      })
+      .catch(err => {
+        console.log('%c' + err, 'color: #dd3333');
+      })
+  }
+
   return (
     <main className="content content_type_second">
       <h2 className={`popup__title popup__title_type_page`}>Регистрация</h2>
-      <form className="form" name="register">
+      <form className="form" name="register" onSubmit={handleSubmit}>
         <label className="form__field">
           <input type="text"
                  name="email"
@@ -14,18 +59,20 @@ function Register(props) {
                  required
                  minLength="2"
                  maxLength="40"
-                 value=""
+                 onChange={handleChange}
+                 value={userData.email}
                  className="form__text-input form__text-input_type_name form__text-input_type_inverted"/>
         </label>
         <label className="form__field form__field_last">
-          <input type="text"
+          <input type="password"
                  name="password"
                  id="password-input"
                  placeholder="Пароль"
                  required
                  minLength="2"
                  maxLength="200"
-                 value=""
+                 onChange={handleChange}
+                 value={userData.password}
                  className="form__text-input form__text-input_type_job form__text-input_type_inverted"/>
         </label>
         <button type="submit"
