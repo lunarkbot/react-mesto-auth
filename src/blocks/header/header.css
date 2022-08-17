@@ -1,6 +1,9 @@
 .header {
-  display: flex;
+  display: grid;
+  grid-template-areas:  'nav-menu nav-menu'
+                        'logo nav-button';
   justify-content: space-between;
+  grid-template-rows: 0 auto;
   align-items: center;
   min-height: 84px;
   padding: 0 27px;

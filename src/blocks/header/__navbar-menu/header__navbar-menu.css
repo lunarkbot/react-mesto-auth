@@ -1,0 +1,4 @@
+.header__navbar-menu {
+  display: none;
+  grid-area: nav-menu;
+}
