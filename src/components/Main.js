@@ -10,7 +10,12 @@ export default function Main(props) {
     <main className="content">
       <section className="profile">
         <div className="profile__avatar-wrap">
-          <img className="profile__avatar" ref={props.avatarRef} src={currentUser.avatar ? currentUser.avatar : avatarDefault} alt="Аватар" onClick={props.onEditAvatar} />
+          <img
+            className="profile__avatar"
+            ref={props.avatarRef}
+            src={currentUser.avatar ? currentUser.avatar : avatarDefault}
+            alt="Аватар"
+            onClick={props.onEditAvatar} />
         </div>
         <div className="profile__info">
           <div className="profile__name-wrap">

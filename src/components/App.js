@@ -1,5 +1,6 @@
 import '../pages/index.css';
 import {useRef, useState, useEffect} from "react";
+import { Switch, Route } from 'react-router-dom';
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -10,6 +11,8 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import ConfirmDeletion from "./ConfirmDeletion";
+import Register from './Register';
+import Login from './Login';
 
 function App() {
   const avatarRef = useRef();
@@ -174,47 +177,58 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <Header />
-        <Main
-            onEditAvatar={handleEditAvatarClick}
-            onAddPlace={handleAddPlaceClick}
-            onEditProfile={handleEditProfileClick}
-            onCardClick={handleCardClick}
-            selectedCard={selectedCard}
-            avatarRef={avatarRef}
-            cards={cards}
-            onCardLike={handleCardLike}
-            onCardDelete={handleConfirmation}
-        />
+        <Switch>
 
-        <EditProfilePopup
-          isOpen={isOpen.isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
-          animationClass={animationClass}
-        ></EditProfilePopup>
+          <Route exact path='/'>
+            <Main
+              onEditAvatar={handleEditAvatarClick}
+              onAddPlace={handleAddPlaceClick}
+              onEditProfile={handleEditProfileClick}
+              onCardClick={handleCardClick}
+              selectedCard={selectedCard}
+              avatarRef={avatarRef}
+              cards={cards}
+              onCardLike={handleCardLike}
+              onCardDelete={handleConfirmation}
+            />
 
-        <AddPlacePopup
-          isOpen={isOpen.isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          onAddPlace={handleAddPlace}
-          animationClass={animationClass}
-        ></AddPlacePopup>
+            <EditProfilePopup
+              isOpen={isOpen.isEditProfilePopupOpen}
+              onClose={closeAllPopups}
+              onUpdateUser={handleUpdateUser}
+              animationClass={animationClass}
+            ></EditProfilePopup>
 
-        <EditAvatarPopup
-          isOpen={isOpen.isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
-          animationClass={animationClass}
-        ></EditAvatarPopup>
+            <AddPlacePopup
+              isOpen={isOpen.isAddPlacePopupOpen}
+              onClose={closeAllPopups}
+              onAddPlace={handleAddPlace}
+              animationClass={animationClass}
+            ></AddPlacePopup>
 
-        <ConfirmDeletion
-          isOpen={isOpen.isConfirmationPopupOpen}
-          onClose={closeAllPopups}
-          animationClass={animationClass}
-          onConfirmClick={handleCardDelete}
-        ></ConfirmDeletion>
+            <EditAvatarPopup
+              isOpen={isOpen.isEditAvatarPopupOpen}
+              onClose={closeAllPopups}
+              onUpdateAvatar={handleUpdateAvatar}
+              animationClass={animationClass}
+            ></EditAvatarPopup>
 
-        <ImagePopup onClose={closeAllPopups} card={selectedCard} animationClass={animationClass} />
+            <ConfirmDeletion
+              isOpen={isOpen.isConfirmationPopupOpen}
+              onClose={closeAllPopups}
+              animationClass={animationClass}
+              onConfirmClick={handleCardDelete}
+            ></ConfirmDeletion>
+
+            <ImagePopup onClose={closeAllPopups} card={selectedCard} animationClass={animationClass} />
+          </Route>
+          <Route path='/sign-up'>
+            <Register/>
+          </Route>
+          <Route path='/sign-in'>
+            <Login/>
+          </Route>
+        </Switch>
         <Footer/>
       </div>
     </CurrentUserContext.Provider>
