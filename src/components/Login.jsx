@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import auth from '../utils/auth';
+import {withRouter} from 'react-router-dom';
 
 function Login(props) {
 
@@ -33,7 +34,8 @@ function Login(props) {
         }
     })
       .then(data => {
-        console.log(data);
+        localStorage.setItem('token', data.token);
+        props.history.push('/');
       })
       .catch(err => {
         console.log('%c' + err, 'color: #dd3333');
@@ -86,4 +88,4 @@ function Login(props) {
   );
 }
 
-export default Login;
+export default withRouter(Login);

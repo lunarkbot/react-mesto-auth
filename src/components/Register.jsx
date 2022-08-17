@@ -38,7 +38,6 @@ function Register(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(userData)
     auth.signUp(userData)
       .then(res => {
         if (res.ok) {
@@ -47,7 +46,6 @@ function Register(props) {
             isOpen: true,
             isOk: true
           });
-          console.log(tooltip)
         } else {
           let message = '';
 
