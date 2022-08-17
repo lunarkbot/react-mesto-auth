@@ -30,7 +30,10 @@ class Auth {
   }
 
   checkToken(token) {
+    this._controller = new AbortController();
+    const signal = this._controller.signal;
     return fetch(`${this._baseUrl}/users/me`, {
+      signal,
       method: 'GET',
       headers: {
         ...this._headers,

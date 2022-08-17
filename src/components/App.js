@@ -1,6 +1,6 @@
 import '../pages/index.css';
 import {useEffect, useState} from "react";
-import { Switch, Route } from 'react-router-dom';
+import {Switch, Route, withRouter} from 'react-router-dom';
 import Header from "./Header";
 import Footer from "./Footer";
 import Register from './Register';
@@ -9,7 +9,7 @@ import Content from './Content';
 import ProtectedRoute from './ProtectedRoute';
 import auth from '../utils/auth';
 
-function App() {
+function App(props) {
   const [currentUser, setCurrentUser] = useState({
     loggedIn: false,
     email: false,
@@ -40,8 +40,7 @@ function App() {
 
             return Promise.reject(`Ошибка: ${res.status}. ${message}`);
           }
-        }).then(data => {
-          console.log(data);
+        }).then(({ data }) => {
           setCurrentUser({
             loggedIn: true,
             email: data.email,
@@ -50,7 +49,12 @@ function App() {
           })
       })
         .catch(err => {
-          console.log(err);
+          if (err.name === 'AbortError') {
+            console.log('Соединение было прервано')
+          } else {
+            console.log(err);
+          }
+
           setCurrentUser({
             ...currentUser,
             isChecked: false,
@@ -58,11 +62,19 @@ function App() {
         })
     }
 
+    return () => {
+      auth.abortConnection();
+    }
   }, [])
+
+  function handleSignOut() {
+    localStorage.removeItem('token');
+    props.history.push('sign-in');
+  }
 
   return (
       <div className="page">
-        <Header loggedIn={currentUser.loggedIn} />
+        <Header currentUser={currentUser} onSignOut={handleSignOut} />
         <Switch>
           {currentUser.isChecked && <ProtectedRoute
             path='/'
@@ -82,4 +94,4 @@ function App() {
   );
 }
 
-export default App;
+export default withRouter(App);

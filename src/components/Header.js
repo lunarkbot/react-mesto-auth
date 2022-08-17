@@ -2,7 +2,8 @@ import React from 'react';
 import {NavLink, Route, Switch} from 'react-router-dom';
 import NavBar from './NavBar';
 
-export default function Header() {
+export default function Header( { currentUser, onSignOut } ) {
+
   return(
     <header className="header">
       <div className="header__logo"></div>
@@ -10,7 +11,8 @@ export default function Header() {
       <Switch>
         <Route exact path="/">
           <NavBar>
-            <NavLink to="/sign-in" className="header__navbar-link">Выйти</NavLink>
+            <div>{currentUser.email}</div>
+            <div onClick={onSignOut} className="header__navbar-link">Выйти</div>
           </NavBar>
           <div className="header__navbar-menu"></div>
         </Route>

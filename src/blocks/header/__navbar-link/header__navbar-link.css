@@ -1,4 +1,5 @@
 .header__navbar-link {
   color: #a9a9a9;
   text-decoration: none;
+  cursor: pointer;
 }
