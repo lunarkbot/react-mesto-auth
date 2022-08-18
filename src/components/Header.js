@@ -1,20 +1,29 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {NavLink, Route, Switch} from 'react-router-dom';
 import NavBar from './NavBar';
 
-export default function Header( { currentUser, onSignOut } ) {
+export default function Header( { currentUser, onSignOut, className } ) {
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  function handleClick() {
+    setIsMenuOpen(!isMenuOpen);
+  }
 
   return(
-    <header className="header">
+    <header className={`header ${currentUser.loggedIn && className}`}>
       <div className="header__logo"></div>
 
       <Switch>
         <Route exact path="/">
-          <NavBar>
+          <NavBar className={`header__navbar_type_main ${isMenuOpen && 'header__navbar_active'}`}>
             <div>{currentUser.email}</div>
             <div onClick={onSignOut} className="header__navbar-link">Выйти</div>
           </NavBar>
-          <div className="header__navbar-menu"></div>
+          <div
+            onClick={handleClick}
+            className={`header__navbar-menu ${isMenuOpen && 'header__navbar-menu_active'}`}
+          ><span></span></div>
         </Route>
         <Route path="/sign-up">
           <NavBar>

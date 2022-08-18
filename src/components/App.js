@@ -76,7 +76,7 @@ function App(props) {
 
   return (
       <div className="page">
-        <Header currentUser={currentUser} onSignOut={handleSignOut} />
+        <Header className="header_type_main" currentUser={currentUser} onSignOut={handleSignOut} />
         <Switch>
           {isChecked && <ProtectedRoute
             path='/'

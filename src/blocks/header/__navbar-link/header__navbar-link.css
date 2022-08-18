@@ -1,5 +1,10 @@
 .header__navbar-link {
-  color: #a9a9a9;
+  color: #fff;
   text-decoration: none;
   cursor: pointer;
+  transition: color 200ms;
+}
+
+.header__navbar-link:hover {
+  color: #a9a9a9;
 }
