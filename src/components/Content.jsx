@@ -153,9 +153,7 @@ function Content(props) {
     api.getCards()
       .then(cards => setCards([...cards]))
       .catch(err => console.log(err));
-  },[])
 
-  useEffect(() => {
     api.getUserData()
       .then(userInfo => {
         setCurrentUser({
@@ -163,7 +161,7 @@ function Content(props) {
         })
       })
       .catch(err => console.log(err));
-  },[]);
+  },[])
 
   useEffect(() => {
     setAnimationClass(' popup_animated');

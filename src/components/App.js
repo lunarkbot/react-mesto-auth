@@ -31,26 +31,7 @@ function App(props) {
     setIsChecked(false);
 
     auth.checkToken(token)
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          let message = '';
-
-          switch (res.status) {
-            case 400:
-              message = 'Токен не передан или передан не в том формате.';
-              break;
-            case 401:
-              message = 'Переданный токен некорректен.';
-              break;
-            default:
-              message = 'Повторите попытку позже.';
-          }
-
-          return Promise.reject(`Ошибка: ${res.status}. ${message}`);
-        }
-      }).then(({ data }) => {
+      .then(({ data }) => {
         setCurrentUser({
           loggedIn: true,
           email: data.email,

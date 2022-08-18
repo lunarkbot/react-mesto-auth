@@ -39,26 +39,12 @@ function Register(props) {
   function handleSubmit(e) {
     e.preventDefault();
     auth.signUp(userData)
-      .then(res => {
-        if (res.ok) {
-          setTooltip({
-            ...tooltip,
-            isOpen: true,
-            isOk: true
-          });
-        } else {
-          let message = '';
-
-          switch (res.status) {
-            case 400:
-              message = 'Некорректно заполнено одно из полей.';
-              break;
-            default:
-              message = 'Повторите попытку позже.';
-          }
-
-          return Promise.reject(`Ошибка: ${res.status}. ${message}`);
-        }
+      .then(() => {
+        setTooltip({
+          ...tooltip,
+          isOpen: true,
+          isOk: true
+        });
       })
       .catch(err => {
         console.log('%c' + err, 'color: #dd3333');
@@ -102,7 +88,7 @@ function Register(props) {
           <button type="submit"
                   className="form__submit-button form__submit-button_type_inverted">Зарегистрироваться
           </button>
-          <div className="form__link-wrap"><NavLink to="/sign-in" className="form__link">Уже зарегистрированы? Войти</NavLink></div>
+          <div className="form__link-wrap">Уже зарегистрированы? <NavLink to="/sign-in" className="form__link">Войти</NavLink></div>
         </form>
       </main>
       <InfoTooltip isOk={tooltip.isOk} isOpen={tooltip.isOpen} onClose={handleClose} />

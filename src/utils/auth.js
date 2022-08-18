@@ -1,9 +1,10 @@
 import { AUTH_BASEURL } from './constants';
 
 class Auth {
-  constructor({baseUrl, headers}) {
+  constructor({baseUrl, headers, checker}) {
     this._baseUrl = baseUrl;
     this._headers = headers;
+    this._checker = checker;
   }
 
   signIn({ email, password }) {
@@ -14,7 +15,7 @@ class Auth {
         password,
         email
       })
-    })
+    }).then(res => this._checker(res, 'signIn'));
   }
 
   signUp({email, password}) {
@@ -25,7 +26,7 @@ class Auth {
         password,
         email
       })
-    })
+    }).then(res => this._checker(res, 'signUp'));
   }
 
   checkToken(token) {
@@ -37,7 +38,7 @@ class Auth {
         ...this._headers,
         "Authorization" : `Bearer ${token}`
       },
-    })
+    }).then(res => this._checker(res, 'checkToken'));
   }
 }
 
@@ -45,5 +46,28 @@ export default new Auth( {
   baseUrl: AUTH_BASEURL,
   headers: {
     "Content-Type": "application/json"
+  },
+  checker: (res, type) => {
+    if (res.ok) {
+      return res.json();
+    } else {
+      let message = '';
+
+      switch (res.status) {
+        case 400:
+          if (type === 'signIn') message = 'Не передано одно из полей.';
+          else if (type === 'signUp') message = 'Некорректно заполнено одно из полей.';
+          else message = 'Токен не передан или передан не в том формате.';
+          break;
+        case 401:
+          if (type === 'signIn') message = 'Пользователь с email не найден.';
+          else message = 'Переданный токен некорректен.';
+          break;
+        default:
+          message = 'Повторите попытку позже.';
+      }
+
+      return Promise.reject(`Ошибка: ${res.status}. ${message}`);
+    }
   }
 })

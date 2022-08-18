@@ -1,30 +1,30 @@
 import {useContext} from "react";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
-export default function Card(props) {
+export default function Card( { onCardClick, onCardLike, onCardDelete, card } ) {
   const currentUser = useContext(CurrentUserContext);
 
   function handleClick() {
-    props.onCardClick(props.card.link, props.card.name)
+    onCardClick(card.link, card.name)
   }
 
   function handleLikeClick() {
-    props.onCardLike(props.card);
+    onCardLike(card);
   }
 
   function handleDeleteClick() {
-    props.onCardDelete(props.card);
+    onCardDelete(card);
   }
 
-  const isOwn = props.card.owner._id === currentUser._id;
-  const isLiked = props.card.likes.some(i => i._id === currentUser._id);
+  const isOwn = card.owner._id === currentUser._id;
+  const isLiked = card.likes.some(i => i._id === currentUser._id);
 
   return(
     <li className="photo-grid__item">
       <div className="photo-grid__photo-wrap">
-        <img src={props.card.link}
+        <img src={card.link}
              className="photo-grid__photo"
-             alt={props.card.name}
+             alt={card.name}
              onClick={handleClick}
         />
         {isOwn && <button
@@ -33,7 +33,7 @@ export default function Card(props) {
                     onClick={handleDeleteClick}></button>}
       </div>
       <div className="photo-grid__caption">
-        <h2 className="photo-grid__title">{props.card.name}</h2>
+        <h2 className="photo-grid__title">{card.name}</h2>
         <div className="likes-counter">
           <button
             className={
@@ -42,7 +42,7 @@ export default function Card(props) {
             type="button"
             onClick={handleLikeClick}
           ></button>
-          <span className="likes-counter__result">{props.card.likes.length}</span>
+          <span className="likes-counter__result">{card.likes.length}</span>
         </div>
       </div>
     </li>
