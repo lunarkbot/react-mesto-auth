@@ -14,57 +14,59 @@ function App(props) {
     loggedIn: false,
     email: false,
     id: false,
-    isChecked: false,
   });
+
+  function handleLogin() {
+    setCurrentUser({
+      ...currentUser,
+      loggedIn: true
+    })
+  }
+
+  const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (token) {
-      auth.checkToken(token)
-        .then(res => {
-          if (res.ok) {
-            return res.json();
-          } else {
-            let message = '';
+    setIsChecked(false);
 
-            switch (res.status) {
-              case 400:
-                message = 'Токен не передан или передан не в том формате.';
-                break;
-              case 401:
-                message = 'Переданный токен некорректен.';
-                break;
-              default:
-                message = 'Повторите попытку позже.';
-            }
+    auth.checkToken(token)
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          let message = '';
 
-            return Promise.reject(`Ошибка: ${res.status}. ${message}`);
-          }
-        }).then(({ data }) => {
-          setCurrentUser({
-            loggedIn: true,
-            email: data.email,
-            id: data._id,
-            isChecked: true,
-          })
-      })
-        .catch(err => {
-          if (err.name === 'AbortError') {
-            console.log('Соединение было прервано')
-          } else {
-            console.log(err);
+          switch (res.status) {
+            case 400:
+              message = 'Токен не передан или передан не в том формате.';
+              break;
+            case 401:
+              message = 'Переданный токен некорректен.';
+              break;
+            default:
+              message = 'Повторите попытку позже.';
           }
 
-          setCurrentUser({
-            ...currentUser,
-            isChecked: false,
-          })
+          return Promise.reject(`Ошибка: ${res.status}. ${message}`);
+        }
+      }).then(({ data }) => {
+        setCurrentUser({
+          loggedIn: true,
+          email: data.email,
+          id: data._id,
         })
-    }
 
-    return () => {
-      auth.abortConnection();
-    }
+    })
+      .catch(err => {
+        if (err.name === 'AbortError') {
+          console.log('Соединение было прервано')
+        } else {
+          console.log(err);
+        }
+      })
+      .finally(() => {
+        setIsChecked(true);
+      })
   }, [])
 
   function handleSignOut() {
@@ -76,7 +78,7 @@ function App(props) {
       <div className="page">
         <Header currentUser={currentUser} onSignOut={handleSignOut} />
         <Switch>
-          {currentUser.isChecked && <ProtectedRoute
+          {isChecked && <ProtectedRoute
             path='/'
             exact
             loggedIn={currentUser.loggedIn}
@@ -86,7 +88,7 @@ function App(props) {
             <Register/>
           </Route>
           <Route path='/sign-in'>
-            <Login/>
+            <Login onLogin={handleLogin} />
           </Route>
         </Switch>
         <Footer/>

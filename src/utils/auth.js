@@ -4,7 +4,6 @@ class Auth {
   constructor({baseUrl, headers}) {
     this._baseUrl = baseUrl;
     this._headers = headers;
-    this._controller = null;
   }
 
   signIn({ email, password }) {
@@ -30,20 +29,15 @@ class Auth {
   }
 
   checkToken(token) {
-    this._controller = new AbortController();
-    const signal = this._controller.signal;
+    if (!token) return Promise.reject(`Ошибка: Отсутствует токен`);;
+
     return fetch(`${this._baseUrl}/users/me`, {
-      signal,
       method: 'GET',
       headers: {
         ...this._headers,
         "Authorization" : `Bearer ${token}`
       },
     })
-  }
-
-  abortConnection() {
-    this._controller.abort();
   }
 }
 

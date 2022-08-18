@@ -34,8 +34,11 @@ function Login(props) {
         }
     })
       .then(data => {
-        localStorage.setItem('token', data.token);
-        props.history.push('/');
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+          props.onLogin();
+          props.history.push('/');
+        }
       })
       .catch(err => {
         console.log('%c' + err, 'color: #dd3333');
