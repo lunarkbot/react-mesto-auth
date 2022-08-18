@@ -16,9 +16,10 @@ function App(props) {
     id: false,
   });
 
-  function handleLogin() {
+  function handleLogin(email) {
     setCurrentUser({
       ...currentUser,
+      email,
       loggedIn: true
     })
   }

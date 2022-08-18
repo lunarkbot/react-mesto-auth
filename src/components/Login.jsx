@@ -36,7 +36,7 @@ function Login(props) {
       .then(data => {
         if (data.token) {
           localStorage.setItem('token', data.token);
-          props.onLogin();
+          props.onLogin(userData.email);
           props.history.push('/');
         }
       })
